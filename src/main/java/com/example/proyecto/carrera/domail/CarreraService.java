@@ -8,6 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.Banner;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class CarreraService {
 
@@ -20,6 +23,10 @@ public class CarreraService {
     }
 
     public CarreraResponseDto createCarrera(CarreraRequestDto requestDto) {
+
+        if (carreraRepository.findByNombre(requestDto.getNombre()).isPresent()){
+            throw new ResourceNotFoundException("La carrera ya existe");
+        }
         Carrera carrera = new Carrera();
         modelMapper.map(requestDto, carrera);
         carreraRepository.save(carrera);
@@ -30,6 +37,16 @@ public class CarreraService {
         Carrera carrera = carreraRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Carrera no encontrada"));
         return modelMapper.map(carrera, CarreraResponseDto.class);
+    }
+
+    public List<CarreraResponseDto> getAll(){
+        List<Carrera> carreras = carreraRepository.findAll();
+        List<CarreraResponseDto> carrerasDto = new ArrayList<>();
+        for (Carrera carrera : carreras) {
+            carrerasDto.add(modelMapper.map(carrera, CarreraResponseDto.class));
+        }
+
+        return carrerasDto;
     }
 
     public CarreraResponseDto updateCarrera(Long id, CarreraRequestDto requestDto) {

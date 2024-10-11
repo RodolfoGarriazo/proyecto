@@ -17,4 +17,5 @@ public class UsuarioRequestDto {
     private String password;
 
     private Long carreraId;
+
 }

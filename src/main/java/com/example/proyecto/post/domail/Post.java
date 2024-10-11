@@ -2,6 +2,7 @@ package com.example.proyecto.post.domail;
 
 import com.example.proyecto.actividad.domail.Actividad;
 import com.example.proyecto.comentario.domail.Comentario;
+import com.example.proyecto.curso.domail.Curso;
 import com.example.proyecto.material.domail.Material;
 import com.example.proyecto.usuario.domail.Usuario;
 import jakarta.persistence.*;
@@ -24,7 +25,11 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    private Usuario autor;
+    private Usuario usuario;
+
+    @ManyToOne
+    @JoinColumn(name = "curso_id")
+    private Curso curso;
 
     @OneToMany(mappedBy = "post")
     private List<Comentario> comentarios;
@@ -32,8 +37,10 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Material> materiales;
 
+    /*
     @OneToMany(mappedBy = "post")
     private List<Actividad> actividades;
+    */
 
     @PrePersist
     public void prePersist(){

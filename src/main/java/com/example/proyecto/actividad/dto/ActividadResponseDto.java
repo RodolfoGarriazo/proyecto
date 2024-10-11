@@ -4,11 +4,10 @@ import com.example.proyecto.actividad.domail.Categoria;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class ActividadResponseDto {
-
-    private Long id;
 
     private String nombre;
 
@@ -16,7 +15,9 @@ public class ActividadResponseDto {
 
     private String enlace;
 
-    private LocalDate fecha;
+    private LocalDateTime fecha;
+
+    private LocalDateTime fechaActividad;
 
     private Long postId;
 

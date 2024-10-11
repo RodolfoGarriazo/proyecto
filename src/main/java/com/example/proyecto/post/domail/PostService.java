@@ -46,13 +46,14 @@ public class PostService {
         Usuario usuario = usuarioRepository.findById(requestDto.getUsuarioId()).
                 orElseThrow(()-> new ResourceNotFoundException("Usuario no encontrado"));
 
-        post.setAutor(usuario);
+        post.setUsuario(usuario);
 
         List<Material> materials = materialRepository.findAllById(requestDto.getMaterialesIds());
         post.setMateriales(materials);
 
+        /*
         List<Actividad> actividades = actividadRepository.findAllById(requestDto.getActividadesIds());
-        post.setActividades(actividades);
+        post.setActividades(actividades);*/
 
         postRepository.save(post);
         return modelMapper.map(post, PostResponseDto.class);

@@ -7,5 +7,4 @@ public class CursoRequestDto {
 
     private String nombre;
 
-    private Long carreraId;
 }

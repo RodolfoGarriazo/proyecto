@@ -24,12 +24,12 @@ public class EmailListener {
     public void onEmailEvent(EmailEvent event) {
 
         Map<String, Object> variables = new HashMap<>();
-        variables.put("nombreUsuario", event.getNombreUsuario());
-        variables.put("nombreActividad", event.getNombreActividad());
-        variables.put("fechaActividad", event.getFechaActividad());
-        variables.put("horaInicio", event.getHoraInicio());
-        variables.put("enlaceActividad", event.getEnlaceActividad());
+        variables.put("nombreUsuario", event.getActividad().getUsuario().getNombre());
+        variables.put("nombreActividad", event.getActividad().getNombre());
+        variables.put("fechaActividad", event.getActividad().getFechaActividad().toString());
+        variables.put("enlaceActividad", event.getActividad().getEnlace());
+        variables.put("tipoActividad", event.getActividad().getTipo().toString());
 
-        emailService.sendHtmlMessage( variables, event.getEmailDestino());
+        emailService.sendHtmlMessage( variables, event.getActividad().getUsuario().getEmail());
     }
 }

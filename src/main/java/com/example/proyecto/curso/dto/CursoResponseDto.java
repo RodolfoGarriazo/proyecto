@@ -8,7 +8,6 @@ import java.util.List;
 @Data
 public class CursoResponseDto {
 
-    private Long id;
     private String nombre;
     private String carreraNombre;
     private List<Long> postIds;

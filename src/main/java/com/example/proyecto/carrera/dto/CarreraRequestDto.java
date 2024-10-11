@@ -5,7 +5,6 @@ import lombok.Data;
 @Data
 public class CarreraRequestDto {
 
-
     private String nombre;
 
 }

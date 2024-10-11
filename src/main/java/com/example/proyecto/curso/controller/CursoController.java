@@ -18,9 +18,9 @@ public class CursoController {
     }
 
 
-    @PostMapping
-    public ResponseEntity<CursoResponseDto> createCurso(@RequestBody CursoRequestDto cursoRequestDto) {
-        CursoResponseDto response = cursoService.createCurso(cursoRequestDto);
+    @PostMapping("/{carreraId}")
+    public ResponseEntity<CursoResponseDto> createCurso(@PathVariable Long carreraId,@RequestBody CursoRequestDto cursoRequestDto) {
+        CursoResponseDto response = cursoService.createCurso(carreraId,cursoRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -30,9 +30,9 @@ public class CursoController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CursoResponseDto> updateCurso(@PathVariable Long id, @RequestBody CursoRequestDto cursoRequestDto) {
-        CursoResponseDto response = cursoService.updateCurso(id, cursoRequestDto);
+    @PutMapping("/{CarreraId}/{id}")
+    public ResponseEntity<CursoResponseDto> updateCurso(@PathVariable Long carreraId, @PathVariable Long id, @RequestBody CursoRequestDto cursoRequestDto) {
+        CursoResponseDto response = cursoService.updateCurso(carreraId,id, cursoRequestDto);
         return ResponseEntity.ok(response);
     }
 

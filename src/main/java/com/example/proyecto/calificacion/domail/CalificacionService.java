@@ -40,7 +40,7 @@ public class CalificacionService {
 
         Calificacion nuevaCalificacion = new Calificacion();
         nuevaCalificacion.setValor(request.getValor());
-        nuevaCalificacion.setUsuario(new Usuario(request.getUsuarioId()));
+        //nuevaCalificacion.setUsuario(new Usuario(request.getUsuarioId()));
         nuevaCalificacion.setMaterial(material);
 
         calificacionRepository.save(nuevaCalificacion);

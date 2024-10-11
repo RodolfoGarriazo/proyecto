@@ -25,7 +25,7 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioResponseDto);
     }
 
-    @GetMapping("/UsuarioList")
+    @GetMapping("/listUsuarios")
     public ResponseEntity<List<UsuarioResponseDto>> retornarByCarrera(){
         return ResponseEntity.ok(usuarioService.retornarByCarrera());
     }

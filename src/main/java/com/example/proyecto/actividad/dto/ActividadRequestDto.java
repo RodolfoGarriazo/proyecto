@@ -5,6 +5,10 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Data;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 @Data
 public class ActividadRequestDto {
 
@@ -12,15 +16,10 @@ public class ActividadRequestDto {
 
     private Categoria tipo;
 
-    private String enlace;
+    private LocalDate fechaActividad;
 
-    private Long postId;
+    private LocalTime hora;
 
-    private String emailUsuario;
-    private String nombreUsuario;
-    private String fechaActividad;
-    private String horaInicio;
-    private String duracionActividad;
 
 
 }

@@ -2,6 +2,7 @@ package com.example.proyecto.usuario.domail;
 
 import com.example.proyecto.carrera.domail.Carrera;
 import com.example.proyecto.carrera.infrastructure.CarreraRepository;
+import com.example.proyecto.exception.ResourceConflictException;
 import com.example.proyecto.exception.ResourceNotFoundException;
 import com.example.proyecto.usuario.dto.UsuarioRequestDto;
 import com.example.proyecto.usuario.dto.UsuarioResponseDto;
@@ -30,12 +31,21 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDto crear(UsuarioRequestDto usuarioRequestDto){
-        Usuario usuario = new Usuario();
-        modelMapper.map(usuarioRequestDto, usuario);
+
+        if (usuarioRepository.findByEmail(usuarioRequestDto.getEmail()).isPresent()){
+            throw new ResourceConflictException("El email ya existe");
+        }
+
+        Usuario usuario = modelMapper.map(usuarioRequestDto, Usuario.class);
+
         Carrera carrera = carreraRepository.findById(usuarioRequestDto.getCarreraId()).
                 orElseThrow(()-> new ResourceNotFoundException("Carrera no encontrada"));
-        usuario.setCarrera(carrera);
+
+        usuario.getCarreras().add(carrera);
         usuarioRepository.save(usuario);
+        UsuarioResponseDto usuarioResponseDto = modelMapper.map(usuario, UsuarioResponseDto.class);
+        usuarioResponseDto.setNombreCarrera(carrera.getNombre());
+
         return modelMapper.map(usuario, UsuarioResponseDto.class);
     }
 

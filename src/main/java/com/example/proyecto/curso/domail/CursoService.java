@@ -24,13 +24,14 @@ public class CursoService {
     }
 
 
-    public CursoResponseDto createCurso(CursoRequestDto requestDto) {
+    public CursoResponseDto createCurso(Long carreraId,CursoRequestDto requestDto) {
         Curso curso = new Curso();
         modelMapper.map(requestDto, curso);
 
-        Carrera carrera = carreraRepository.findById(requestDto.getCarreraId())
+        Carrera carrera = carreraRepository.findById(carreraId)
                 .orElseThrow(() -> new ResourceNotFoundException("Carrera no encontrada"));
         curso.setCarrera(carrera);
+        carrera.getCursos().add(curso);
 
         cursoRepository.save(curso);
         return modelMapper.map(curso, CursoResponseDto.class);
@@ -42,12 +43,12 @@ public class CursoService {
         return modelMapper.map(curso, CursoResponseDto.class);
     }
 
-    public CursoResponseDto updateCurso(Long id, CursoRequestDto requestDto) {
+    public CursoResponseDto updateCurso(Long carreraId,Long id, CursoRequestDto requestDto) {
         Curso curso = cursoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Curso no encontrado"));
         modelMapper.map(requestDto, curso);
 
-        Carrera carrera = carreraRepository.findById(requestDto.getCarreraId())
+        Carrera carrera = carreraRepository.findById(carreraId)
                 .orElseThrow(() -> new ResourceNotFoundException("Carrera no encontrada"));
         curso.setCarrera(carrera);
 

@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/carreras")
 public class CarreraController {
@@ -26,6 +28,11 @@ public class CarreraController {
     public ResponseEntity<CarreraResponseDto> getCarreraById(@PathVariable Long id) {
         CarreraResponseDto response = carreraService.getCarreraById(id);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CarreraResponseDto>> getAllCarreras() {
+        return ResponseEntity.ok(carreraService.getAll());
     }
 
     @PutMapping("/{id}")
