@@ -1,5 +1,6 @@
 package com.example.proyecto.usuario.infrastructure;
 
+import com.example.proyecto.carrera.domail.Carrera;
 import com.example.proyecto.usuario.domail.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
