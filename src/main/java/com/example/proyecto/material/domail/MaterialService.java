@@ -1,5 +1,6 @@
 package com.example.proyecto.material.domail;
 
+import com.example.proyecto.apis.amazonS3.AwsServices;
 import com.example.proyecto.curso.domail.Curso;
 import com.example.proyecto.curso.infrastructure.CursoRepository;
 import com.example.proyecto.exception.ResourceConflictException;
@@ -27,12 +28,18 @@ public class MaterialService {
     private final ModelMapper modelMapper;
     private final UsuarioRepository usuarioRepository;
     private final CursoRepository cursoRepository;
+    private final AwsServices awsServices;
 
-    public MaterialService(MaterialRepository materialRepository, ModelMapper modelMapper, UsuarioRepository usuarioRepository, CursoRepository cursoRepository) {
+    public MaterialService(MaterialRepository materialRepository,
+                           ModelMapper modelMapper,
+                           UsuarioRepository usuarioRepository,
+                           CursoRepository cursoRepository,
+                           AwsServices awsServices) {
         this.materialRepository = materialRepository;
         this.modelMapper = modelMapper;
         this.usuarioRepository = usuarioRepository;
         this.cursoRepository = cursoRepository;
+        this.awsServices = awsServices;
     }
 
     /*
@@ -113,7 +120,9 @@ public class MaterialService {
         materialRepository.delete(material);
     }
     */
-    public MaterialResponseDto subirMaterial(Long cursoId, Long usuarioId, MaterialRequestDto requestDto) {
+    public MaterialResponseDto subirMaterial(Long cursoId,
+                                             Long usuarioId,
+                                             MaterialRequestDto requestDto) {
 
         if (cursoRepository.findByNombre(requestDto.getNombre()).isPresent()){
             throw new ResourceConflictException("Archivo ya existe");
@@ -126,7 +135,9 @@ public class MaterialService {
 
         //Almacenar el archivo  AWS S3
         try{
-            String urlArchivo = almacenarArchivo(requestDto.getArchivo());
+            //String urlArchivo = almacenarArchivo(requestDto.getArchivo());
+
+            String urlArchivo = awsServices.uploadFile(requestDto.getArchivo());
 
             Material material = new Material();
             material.setNombre(requestDto.getNombre());

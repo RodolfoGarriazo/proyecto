@@ -4,9 +4,11 @@ import com.example.proyecto.actividad.dto.ActividadRequestDto;
 import com.example.proyecto.actividad.dto.ActividadResponseDto;
 import com.example.proyecto.actividad.infrastructure.ActividadRepository;
 import com.example.proyecto.apis.tinyUrl.TinyUrlService;
+import com.example.proyecto.carrera.domail.Carrera;
 import com.example.proyecto.curso.domail.Curso;
 import com.example.proyecto.curso.infrastructure.CursoRepository;
 import com.example.proyecto.email.event.EmailEvent;
+import com.example.proyecto.exception.ResourceForbiddenException;
 import com.example.proyecto.exception.ResourceNotFoundException;
 import com.example.proyecto.post.infrastructure.PostRepository;
 import com.example.proyecto.usuario.domail.Usuario;
@@ -57,6 +59,10 @@ public class ActividadService {
 
         Curso curso = cursoRepository.findById(cursoId).
                 orElseThrow(()-> new ResourceNotFoundException("Curso no encontrado"));
+
+        if (!usuario.getCarreras().contains(curso.getCarrera())) {
+            throw new ResourceForbiddenException("El usuario no está inscrito en la carrera de este curso");
+        }
 
         Actividad actividad = new Actividad();
         modelMapper.map(requestDto, actividad);

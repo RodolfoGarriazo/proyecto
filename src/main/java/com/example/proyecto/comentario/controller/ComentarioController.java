@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/comentarios")
 public class ComentarioController {
@@ -17,11 +19,9 @@ public class ComentarioController {
         this.comentarioService = comentarioService;
     }
 
-    @PostMapping("/{postid}/{usuarioId}")
-    public ResponseEntity<ComentarioResponseDto> createComentario(@PathVariable Long postid,
-                                                                  @PathVariable Long usuarioId,
-                                                                  @RequestBody ComentarioRequestDto comentarioRequestDto) {
-        ComentarioResponseDto response = comentarioService.createComentario(postid,usuarioId, comentarioRequestDto);
+    @PostMapping()
+    public ResponseEntity<ComentarioResponseDto> createComentario(@RequestBody ComentarioRequestDto comentarioRequestDto) {
+        ComentarioResponseDto response = comentarioService.createComentario(comentarioRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -29,6 +29,11 @@ public class ComentarioController {
     public ResponseEntity<ComentarioResponseDto> getComentarioById(@PathVariable Long id) {
         ComentarioResponseDto response = comentarioService.getComentarioById(id);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<ComentarioResponseDto>> getAllComentarios() {
+        return ResponseEntity.ok(comentarioService.getAllComentarios());
     }
 
     /*

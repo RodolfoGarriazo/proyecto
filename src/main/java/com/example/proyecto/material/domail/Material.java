@@ -1,15 +1,18 @@
 package com.example.proyecto.material.domail;
 
+import com.example.proyecto.calificacion.domail.Calificacion;
 import com.example.proyecto.curso.domail.Curso;
 import com.example.proyecto.post.domail.Post;
 import com.example.proyecto.usuario.domail.Usuario;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Entity
@@ -29,8 +32,6 @@ public class Material {
     @Enumerated(EnumType.STRING)
     private Tipo tipo;
 
-    @Min(value = 1, message = "Minimo 1")
-    @Max(value = 5, message = "Maximo de 5")
     private Double rating;
 
     private int numeroCalificaciones;
@@ -50,13 +51,22 @@ public class Material {
     @JsonBackReference
     private Curso curso;
 
+    @OneToMany(mappedBy = "material")
+    @JsonManagedReference
+    private List<Calificacion> calificaciones;
+
+
     @PrePersist
     public void prePersist(){
         fechaCreada = LocalDate.now();
     }
 
     public void agregarCalificacion(double nuevaCalificacion) {
-        this.rating = (this.rating * this.numeroCalificaciones + nuevaCalificacion) / (this.numeroCalificaciones + 1);
+        if (this.rating == null) {
+            this.rating = nuevaCalificacion;
+        } else {
+            this.rating = (this.rating * this.numeroCalificaciones + nuevaCalificacion) / (this.numeroCalificaciones + 1);
+        }
         this.numeroCalificaciones++;
     }
 

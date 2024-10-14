@@ -11,6 +11,9 @@ import com.example.proyecto.usuario.infrastructure.UsuarioRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class ComentarioService {
 
@@ -30,12 +33,12 @@ public class ComentarioService {
 
     }
 
-    public ComentarioResponseDto createComentario(Long postId, Long usuarioid,ComentarioRequestDto requestDto) {
+    public ComentarioResponseDto createComentario(ComentarioRequestDto requestDto) {
 
-        Usuario usuario = usuarioRepository.findById(usuarioid)
+        Usuario usuario = usuarioRepository.findById(requestDto.getUsuarioId())
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
 
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findById(requestDto.getPostId())
                 .orElseThrow(() -> new ResourceNotFoundException("Post no encontrado"));
 
         Comentario comentario = new Comentario();
@@ -45,13 +48,26 @@ public class ComentarioService {
         comentario.setPost(post);
 
         comentarioRepository.save(comentario);
-        return modelMapper.map(comentario, ComentarioResponseDto.class);
+
+        ComentarioResponseDto responseDto = modelMapper.map(comentario, ComentarioResponseDto.class);
+        responseDto.setUsuarioNombre(usuario.getNombre());
+
+        return responseDto;
     }
 
     public ComentarioResponseDto getComentarioById(Long id) {
         Comentario comentario = comentarioRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Comentario no encontrado"));
         return modelMapper.map(comentario, ComentarioResponseDto.class);
+    }
+
+    public List<ComentarioResponseDto> getAllComentarios() {
+        List<Comentario> comentarios = comentarioRepository.findAll();
+        List<ComentarioResponseDto> comentariosDto = new ArrayList<>();
+        for (Comentario comentario : comentarios) {
+            comentariosDto.add(modelMapper.map(comentario, ComentarioResponseDto.class));
+        }
+        return comentariosDto;
     }
 
     public ComentarioResponseDto updateComentario(Long id, ComentarioRequestDto requestDto) {
